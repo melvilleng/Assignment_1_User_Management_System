@@ -72,10 +72,10 @@ function AdminDashboard() {
         username: username,
       })
       .then((response) => {
-        if(response.data.dup){
-          alert(response.data.dup)
-        }else{
-          console.log("User Group has been added")
+        if (response.data.dup) {
+          alert(response.data.dup);
+        } else {
+          console.log("User Group has been added");
         }
       });
   };
@@ -88,11 +88,10 @@ function AdminDashboard() {
         username: username,
       })
       .then((response) => {
-        if(response.data.nouser){
-        alert(response.data.nouser)
-        }
-        else{
-          console.log(response.data.message)
+        if (response.data.nouser) {
+          alert(response.data.nouser);
+        } else {
+          console.log(response.data.message);
         }
       });
   };
@@ -183,26 +182,32 @@ function AdminDashboard() {
                         Select your option
                       </option>
                       {showUsergroup.map((usergroupinfo, usergroup) => {
-                        return <option>{usergroupinfo.usergroup_name}</option>;
+                        return (
+                          <option key={usergroup}>
+                            {usergroupinfo.usergroup_name}
+                          </option>
+                        );
                       })}
                     </select>
                     <div className="UGbutton">
-                    <div className="action_UGbtn">
-                    <button className="action_UGbtn"
-                      onClick={() => {
-                        addusertogroup(userinfo.username);
-                      }}
-                    >
-                      Add
-                    </button>
-                    <button className="action_UGbtn"
-                      onClick={() => {
-                        removeuserfromgroup(userinfo.username);
-                      }}
-                    >
-                      Remove
-                    </button>
-                    </div>
+                      <div className="action_UGbtn">
+                        <button
+                          className="action_UGbtn"
+                          onClick={() => {
+                            addusertogroup(userinfo.username);
+                          }}
+                        >
+                          Add
+                        </button>
+                        <button
+                          className="action_UGbtn"
+                          onClick={() => {
+                            removeuserfromgroup(userinfo.username);
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   </td>
                   {/* <td>
