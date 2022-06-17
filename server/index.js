@@ -363,6 +363,27 @@ app.post("/checkgroup", function (req, res) {
   );
 });
 
+//create application
+app.post("/create_application", function (req, res) {
+  const app_acronym = req.body.app_acronym;
+  const app_rnumber = req.body.app_rnumber;
+  const app_description = req.body.app_description;
+  const app_start_date = req.body.app_start_date;
+  const app_end_date = req.body.app_end_date;
+
+  db.query(
+    "INSERT INTO application (App_Acronym,App_Rnumber,App_Description,App_startDate,App_endDate) VALUES (?,?,?,?,?)",
+    [app_acronym, app_rnumber, app_description, app_start_date, app_end_date],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("application values inserted");
+      }
+    }
+  );
+});
+
 app.listen(3001, () => {
   console.log("Hi,I am running!");
 });

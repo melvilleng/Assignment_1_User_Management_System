@@ -19,6 +19,8 @@ import UpdatePw from "./components/Editpassword";
 import UpdateEmail from "./components/EditEmail";
 import CreateuserGroup from "./components/createusergroup";
 import ShowUsergroup from "./components/Listusergroup";
+import Application from "./components/Application";
+import CreateApplication from "./components/CreateApplication";
 
 Axios.defaults.baseURL = "http://localhost:3001";
 
@@ -56,6 +58,8 @@ function Main() {
             <Route path="/user/editEmail/:username" element={<UpdateEmail />} />
             <Route path="/listusergroup" element={<ShowUsergroup />} />
             <Route path="/createusergroup" element={<CreateuserGroup />} />
+            <Route path="/application" element={<Application />} />
+            <Route path="/create-application" element={<CreateApplication />} />
           </Routes>
         </div>
       </BrowserRouter>

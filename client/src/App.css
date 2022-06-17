@@ -3,7 +3,7 @@ body {
 }
 
 .header-bar {
-  background-color: #292929;
+  background-color: #ba3131;
 }
 
 .container--narrow {
@@ -55,7 +55,7 @@ body {
   background: #435d7d;
   color: #fff;
   padding: 16px 30px;
-  margin: -20px -25px 10px;
+  margin: -10px -40px 10px;
   border-radius: 3px 3px 0 0;
 }
 
@@ -170,15 +170,18 @@ textarea.tall-textarea {
   }
 }
 
-#login,#changeemail,#changepw {
+#login,
+#changeemail,
+#changepw,
+#create-application {
   display: flex;
   justify-content: center;
 }
 
-
 .whoIsWatching {
   width: 100vw;
   min-height: 100vh;
+  margin: -16px;
   background-color: #141414;
 }
 
@@ -227,7 +230,7 @@ textarea.tall-textarea {
 }
 
 .button {
-  background-color: #4CAF50; /* Green */
+  background-color: #4caf50; /* Green */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -241,6 +244,16 @@ textarea.tall-textarea {
   width: auto;
 }
 
-.UGbutton{
+.UGbutton {
   width: auto;
+}
+
+#create-application-button {
+  margin-left: 30px;
+  padding-top: 10px;
+}
+
+#create-application-button button {
+  background-color: #fa6400;
+  min-height: 3rem;
 }
