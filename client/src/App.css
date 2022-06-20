@@ -257,3 +257,33 @@ textarea.tall-textarea {
   background-color: #fa6400;
   min-height: 3rem;
 }
+
+.application-container {
+  width: 100vw;
+  min-height: 100vh;
+  margin: -16px;
+  background-color: #141414;
+}
+
+#my-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  text-align: center;
+}
+
+.card {
+  position: relative;
+  width: 280px;
+  min-height: 250px;
+  margin: 20px 0;
+  cursor: pointer;
+  transition: 1s ease;
+  /* horizontal length, vertical length, Blur radius, spread, color */
+  box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.5);
+}
+
+.card:hover {
+  transform: scale(1.1);
+}

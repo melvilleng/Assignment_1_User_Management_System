@@ -384,6 +384,17 @@ app.post("/create_application", function (req, res) {
   );
 });
 
+//show all application
+app.get("/showallapplication", function (req, res) {
+  db.query("SELECT * FROM application", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log("Hi,I am running!");
 });

@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function CreateApplication() {
+  const current = new Date();
+  const date = `${current.getFullYear()}/${
+    current.getMonth() + 1
+  }/${current.getDate()}/`;
   const [acronym, setAcronym] = useState("");
   const [rnumber, setRnumber] = useState("");
   const [description, setDescription] = useState("");
-  const [startdate, setStartdate] = useState("");
-  const [enddate, setEnddate] = useState("");
+  const [startdate, setStartdate] = useState(date);
+  const [enddate, setEnddate] = useState(date);
 
   const createNewApplication = () => {
     axios
@@ -24,6 +28,7 @@ function CreateApplication() {
   };
   return (
     <div>
+      {date}
       <div id="create-application" className="container py-md-5">
         <div className="row align-items-center">
           <form>
@@ -81,6 +86,7 @@ function CreateApplication() {
                 className="form-control"
                 type="date"
                 placeholder="Start Date"
+                defaultValue={date}
                 onChange={(event) => {
                   setStartdate(event.target.value);
                 }}
@@ -96,6 +102,7 @@ function CreateApplication() {
                 className="form-control"
                 type="date"
                 placeholder="End Date"
+                defaultValue={date}
                 onChange={(event) => {
                   setEnddate(event.target.value);
                 }}
