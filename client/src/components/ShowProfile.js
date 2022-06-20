@@ -41,9 +41,11 @@ function ShowProfile() {
         <h1>{usernamestore}</h1>
       </div>
       <div className="memberDiv">
-        <button className="addIcon">
-          <span>Kaaban</span>
-        </button>
+        <Link to="/application">
+          <button className="addIcon">
+            <span>Kaaban</span>
+          </button>
+        </Link>
 
         <Link to="/UserProfile">
           <button className="addIcon">

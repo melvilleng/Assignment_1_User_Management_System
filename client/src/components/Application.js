@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 
 function Application() {
@@ -33,8 +33,8 @@ function Application() {
         return (
           <div className="memberDiv">
             <div id="my-cards">
-              <div class="card" id="grocery_card">
-                <div class="details">
+              <div className="card-app" id="grocery_card">
+                <div className="details">
                   <h3>App Acronym:</h3>
                   <h4>{eachappinfo.App_Acronym}</h4>
                   <h4>Description:</h4>
@@ -48,6 +48,9 @@ function Application() {
                   <h4>
                     {moment(eachappinfo.App_endDate).format("DD-MM-YYYY")}
                   </h4>
+                  <Link to={`/application/${eachappinfo.App_Acronym}`}>
+                    <button>Go to Application</button>
+                  </Link>
                 </div>
               </div>
             </div>

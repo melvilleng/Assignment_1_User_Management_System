@@ -395,6 +395,26 @@ app.get("/showallapplication", function (req, res) {
   });
 });
 
+//create plan
+app.post("/create_plan", function (req, res) {
+  const plan_mvp_name = req.body.plan_mvp_name;
+  const plan_start_date = req.body.plan_start_date;
+  const plan_end_date = req.body.plan_end_date;
+  const plan_app_acronym = req.body.plan_app_Acronym;
+
+  db.query(
+    "INSERT INTO plan (Plan_MVP_name,Plan_startDate,Plan_endDate,Plan_app_Acronym) VALUES (?,?,?,?)",
+    [plan_mvp_name, plan_start_date, plan_end_date, plan_app_acronym],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("application values inserted");
+      }
+    }
+  );
+});
+
 app.listen(3001, () => {
   console.log("Hi,I am running!");
 });

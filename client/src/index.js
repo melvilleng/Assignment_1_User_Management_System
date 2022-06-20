@@ -21,6 +21,8 @@ import CreateuserGroup from "./components/createusergroup";
 import ShowUsergroup from "./components/Listusergroup";
 import Application from "./components/Application";
 import CreateApplication from "./components/CreateApplication";
+import Kaabanboard from "./components/Kaabanboard";
+import CreatePlan from "./components/CreatePlan";
 
 Axios.defaults.baseURL = "http://localhost:3001";
 
@@ -60,6 +62,8 @@ function Main() {
             <Route path="/createusergroup" element={<CreateuserGroup />} />
             <Route path="/application" element={<Application />} />
             <Route path="/create-application" element={<CreateApplication />} />
+            <Route path="/application/:appname" element={<Kaabanboard />} />
+            <Route path="/create-plan/:appname" element={<CreatePlan />} />
           </Routes>
         </div>
       </BrowserRouter>
