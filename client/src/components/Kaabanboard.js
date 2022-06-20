@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 function Kaabanboard() {
   //   const current = new Date();
@@ -7,6 +8,18 @@ function Kaabanboard() {
   //     current.getMonth() + 1
   //   }/${current.getDate()}`;
   const app_acronym = useParams();
+  const [showplan, setShowplan] = useState("");
+
+  const showallplan = async () => {
+    await axios.get("/showplan").then((response) => {
+      console.log(response.data);
+      setShowplan(response.data);
+    });
+  };
+
+  useEffect(() => {
+    showallplan();
+  }, []);
 
   return (
     <main class="flex-container">

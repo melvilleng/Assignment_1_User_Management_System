@@ -415,6 +415,17 @@ app.post("/create_plan", function (req, res) {
   );
 });
 
+//show all plan link to project
+app.get("/showplan", function (req, res) {
+  db.query("SELECT * FROM plan", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log("Hi,I am running!");
 });
