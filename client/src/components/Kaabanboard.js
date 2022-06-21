@@ -23,7 +23,7 @@ function Kaabanboard() {
   };
 
   useEffect(() => {
-    showallplan();
+    showallplan(); // eslint-disable-next-line
   }, []);
 
   return (
@@ -66,6 +66,9 @@ function Kaabanboard() {
         </div>
       </div>
       <div className="testcontainer">
+        <Link to={`/create-task/${app_acronym.appname}`}>
+          <button className="float-right">Create Task</button>
+        </Link>
         <div className="rightcontainer p-0">
           <h1 className="h3 mb-3">Kanban Board</h1>
           <div className="row">

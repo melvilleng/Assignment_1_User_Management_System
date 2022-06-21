@@ -395,6 +395,21 @@ app.get("/showallapplication", function (req, res) {
   });
 });
 
+//show one application
+app.get("/showallapplication/:appname", function (req, res) {
+  db.query(
+    "SELECT * FROM application WHERE App_Acronym=?",
+    [req.params.appname],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result[0]);
+      }
+    }
+  );
+});
+
 //create plan
 app.post("/create_plan", function (req, res) {
   const plan_mvp_name = req.body.plan_mvp_name;
@@ -426,6 +441,37 @@ app.post("/showplan", function (req, res) {
         console.log(err);
       } else {
         res.send(result);
+      }
+    }
+  );
+});
+
+//create task
+app.post("/createtask", function (req, res) {
+  const taskid = req.body.task_app_acronym + "_" + req.body.rnumber;
+  const task_name = req.body.taskname;
+  const task_description = req.body.task_description;
+  const task_app_acronym = req.body.task_app_acronym;
+  const task_creator = req.body.task_creator;
+  const task_owner = req.body.task_owner;
+  const task_createdate = req.body.create_date;
+
+  db.query(
+    "INSERT INTO task(Task_id,Task_name,Task_description,Task_app_Acronym,Task_creator,Task_owner,Task_createDate) VALUES (?,?,?,?,?,?,?)",
+    [
+      taskid,
+      task_name,
+      task_description,
+      task_app_acronym,
+      task_creator,
+      task_owner,
+      task_createdate,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("All done");
       }
     }
   );
