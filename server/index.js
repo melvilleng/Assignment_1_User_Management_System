@@ -455,6 +455,7 @@ app.post("/createtask", function (req, res) {
   const task_creator = req.body.task_creator;
   const task_owner = req.body.task_owner;
   const task_createdate = req.body.create_date;
+  const rnumber = req.body.rnumber;
 
   db.query(
     "INSERT INTO task(Task_id,Task_name,Task_description,Task_app_Acronym,Task_creator,Task_owner,Task_createDate) VALUES (?,?,?,?,?,?,?)",
