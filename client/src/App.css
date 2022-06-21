@@ -372,3 +372,9 @@ textarea.tall-textarea {
 .testcontainer {
   max-width: 920px;
 }
+
+.leftinnerbodyplan {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 700px;
+}

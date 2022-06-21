@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import moment from "moment";
 
 function Kaabanboard() {
   //   const current = new Date();
@@ -8,13 +9,17 @@ function Kaabanboard() {
   //     current.getMonth() + 1
   //   }/${current.getDate()}`;
   const app_acronym = useParams();
-  const [showplan, setShowplan] = useState("");
+  const acronym_name = app_acronym.appname.toString();
+  console.log(acronym_name);
+  const [showplan, setShowplan] = useState([]);
 
   const showallplan = async () => {
-    await axios.get("/showplan").then((response) => {
-      console.log(response.data);
-      setShowplan(response.data);
-    });
+    await axios
+      .post("/showplan", { acronym_name: acronym_name })
+      .then((response) => {
+        console.log(response.data);
+        setShowplan(response.data);
+      });
   };
 
   useEffect(() => {
@@ -22,147 +27,156 @@ function Kaabanboard() {
   }, []);
 
   return (
-    <main class="flex-container">
-      <div class="leftcontainer col-3">
-        <div class="col">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-actions float-right">
+    <main className="flex-container">
+      <div className="leftcontainer col-3">
+        <div className="col">
+          <div className="card">
+            <div className="card-header">
+              <div className="card-actions float-right">
                 <Link to={`/create-plan/${app_acronym.appname}`}>
                   <button>Create Plan</button>
                 </Link>
               </div>
-              <h1 class="card-title">Plan</h1>
+              <h1 className="card-title">Plan</h1>
             </div>
-            <div class="card-body p-3">
-              <div class="card bg-light">
-                <div class="card-body p-3">
-                  <p>
-                    Curabitur ligula sapien, tincidunt non, euismod vitae,
-                    posuere imperdiet, leo. Maecenas malesuada.
-                  </p>
-
-                  <button class="btn btn-outline-primary btn-sm">View</button>
-                </div>
-              </div>
-
-              <button class="btn btn-primary btn-block">Add new</button>
+            <div className="leftinnerbodyplan">
+              {showplan.map((indv_plan, indivdual_plan) => {
+                return (
+                  <div className="card-body p-3" key={indivdual_plan}>
+                    <div className="card bg-secondary">
+                      <div className="card-body p-3">
+                        <p>Plan MVP Name: {indv_plan.Plan_MVP_name}</p>
+                        <p>
+                          Start Date:{" "}
+                          {moment(indv_plan.Plan_startDate).format(
+                            "DD-MM-YYYY"
+                          )}
+                        </p>
+                        <p>
+                          End Date:{" "}
+                          {moment(indv_plan.Plan_endDate).format("DD-MM-YYYY")}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
-      <div class="testcontainer">
-        <div class="rightcontainer p-0">
-          <h1 class="h3 mb-3">Kanban Board</h1>
-          <div class="row">
-            <div class="col">
-              <div class="card card-border-primary">
-                <div class="card-header">
-                  <div class="card-actions float-right"></div>
-                  <h5 class="card-title">Open</h5>
+      <div className="testcontainer">
+        <div className="rightcontainer p-0">
+          <h1 className="h3 mb-3">Kanban Board</h1>
+          <div className="row">
+            <div className="col">
+              <div className="card card-border-primary">
+                <div className="card-header">
+                  <div className="card-actions float-right"></div>
+                  <h5 className="card-title">Open</h5>
                 </div>
-                <div class="card-body p-3">
-                  <div class="card mb-3 bg-light">
-                    <div class="card-body p-3">
+                <div className="card-body p-3">
+                  <div className="card mb-3 bg-light">
+                    <div className="card-body p-3">
                       <p>
                         Curabitur ligula sapien, tincidunt non, euismod vitae,
                         posuere imperdiet, leo. Maecenas malesuada.
                       </p>
 
-                      <button class="btn btn-outline-primary btn-sm">
+                      <button className="btn btn-outline-primary btn-sm">
                         View
                       </button>
                     </div>
                   </div>
 
-                  <button class="btn btn-primary btn-block">Add new</button>
+                  <button className="btn btn-primary btn-block">Add new</button>
                 </div>
               </div>
             </div>
-            <div class="col">
-              <div class="card card-border-warning">
-                <div class="card-header">
-                  <div class="card-actions float-right"></div>
-                  <h5 class="card-title">To-do-list</h5>
+            <div className="col">
+              <div className="card card-border-warning">
+                <div className="card-header">
+                  <div className="card-actions float-right"></div>
+                  <h5 className="card-title">To-do-list</h5>
                 </div>
-                <div class="card-body">
-                  <div class="card mb-3 bg-light">
-                    <div class="card-body p-3">
+                <div className="card-body">
+                  <div className="card mb-3 bg-light">
+                    <div className="card-body p-3">
                       <p>
                         Curabitur ligula sapien, tincidunt non, euismod vitae,
                         posuere imperdiet, leo. Maecenas malesuada.
                       </p>
-                      <div class="float-right mt-n1"></div>
-                      <button class="btn btn-outline-primary btn-sm">
+                      <div className="float-right mt-n1"></div>
+                      <button className="btn btn-outline-primary btn-sm">
                         View
                       </button>
                     </div>
                   </div>
 
-                  <button class="btn btn-primary btn-block">Add new</button>
+                  <button className="btn btn-primary btn-block">Add new</button>
                 </div>
               </div>
             </div>
-            <div class="col">
-              <div class="card card-border-danger">
-                <div class="card-header">
-                  <div class="card-actions float-right"></div>
-                  <h5 class="card-title">Doing</h5>
+            <div className="col">
+              <div className="card card-border-danger">
+                <div className="card-header">
+                  <div className="card-actions float-right"></div>
+                  <h5 className="card-title">Doing</h5>
                 </div>
-                <div class="card-body">
-                  <div class="card mb-3 bg-light">
-                    <div class="card-body p-3">
+                <div className="card-body">
+                  <div className="card mb-3 bg-light">
+                    <div className="card-body p-3">
                       <p>
                         In hac habitasse platea dictumst. Curabitur at lacus ac
                         velit ornare lobortis. Curabitur a felis tristique.
                       </p>
-                      <div class="float-right mt-n1"></div>
+                      <div className="float-right mt-n1"></div>
                     </div>
                   </div>
 
-                  <button class="btn btn-primary btn-block">Add new</button>
+                  <button className="btn btn-primary btn-block">Add new</button>
                 </div>
               </div>
             </div>
-            <div class="col">
-              <div class="card card-border-danger">
-                <div class="card-header">
-                  <div class="card-actions float-right"></div>
-                  <h5 class="card-title">Done</h5>
+            <div className="col">
+              <div className="card card-border-danger">
+                <div className="card-header">
+                  <div className="card-actions float-right"></div>
+                  <h5 className="card-title">Done</h5>
                 </div>
-                <div class="card-body">
-                  <div class="card mb-3 bg-light">
-                    <div class="card-body p-3">
+                <div className="card-body">
+                  <div className="card mb-3 bg-light">
+                    <div className="card-body p-3">
                       <p>
                         In hac habitasse platea dictumst. Curabitur at lacus ac
                         velit ornare lobortis. Curabitur a felis tristique.
                       </p>
-                      <div class="float-right mt-n1"></div>
+                      <div className="float-right mt-n1"></div>
                     </div>
                   </div>
 
-                  <button class="btn btn-primary btn-block">Add new</button>
+                  <button className="btn btn-primary btn-block">Add new</button>
                 </div>
               </div>
             </div>
-            <div class="col">
-              <div class="card card-border-success">
-                <div class="card-header">
-                  <div class="card-actions float-right"></div>
-                  <h5 class="card-title">Close</h5>
+            <div className="col">
+              <div className="card card-border-success">
+                <div className="card-header">
+                  <div className="card-actions float-right"></div>
+                  <h5 className="card-title">Close</h5>
                 </div>
-                <div class="card-body">
-                  <div class="card mb-3 bg-light">
-                    <div class="card-body p-3">
+                <div className="card-body">
+                  <div className="card mb-3 bg-light">
+                    <div className="card-body p-3">
                       <p>
                         Nam pretium turpis et arcu. Duis arcu tortor, suscipit
                         eget, imperdiet nec, imperdiet iaculis, ipsum.
                       </p>
-                      <div class="float-right mt-n1"></div>
+                      <div className="float-right mt-n1"></div>
                     </div>
                   </div>
 
-                  <button class="btn btn-primary btn-block">Add new</button>
+                  <button className="btn btn-primary btn-block">Add new</button>
                 </div>
               </div>
             </div>
