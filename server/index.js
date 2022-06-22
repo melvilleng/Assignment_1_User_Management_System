@@ -455,7 +455,7 @@ app.post("/createtask", function (req, res) {
   const task_creator = req.body.task_creator;
   const task_owner = req.body.task_owner;
   const task_createdate = req.body.create_date;
-  const rnumber = req.body.rnumber;
+  let rnumber = req.body.rnumber;
 
   db.query(
     "INSERT INTO task(Task_id,Task_name,Task_description,Task_app_Acronym,Task_creator,Task_owner,Task_createDate) VALUES (?,?,?,?,?,?,?)",
@@ -473,6 +473,48 @@ app.post("/createtask", function (req, res) {
         console.log(err);
       } else {
         console.log("All done");
+        rnumber = rnumber + 1;
+        db.query(
+          "UPDATE application SET App_Rnumber=? WHERE App_Acronym=?",
+          [rnumber, task_app_acronym],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log("Rnumber updated");
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+//show all task
+app.get("/showtask/:appname", function (req, res) {
+  db.query(
+    "SELECT * FROM task WHERE Task_app_Acronym=?",
+    [req.params.appname],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+//show single task
+app.get("/showsingletask/:taskid", function (req, res) {
+  db.query(
+    "SELECT * FROM task WHERE Task_id=?",
+    [req.params.taskid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result[0]);
       }
     }
   );

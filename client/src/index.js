@@ -24,6 +24,7 @@ import CreateApplication from "./components/CreateApplication";
 import Kaabanboard from "./components/Kaabanboard";
 import CreatePlan from "./components/CreatePlan";
 import CreateTask from "./components/CreateTask";
+import IndividualTask from "./components/IndividualTask";
 
 Axios.defaults.baseURL = "http://localhost:3001";
 
@@ -66,6 +67,7 @@ function Main() {
             <Route path="/application/:appname" element={<Kaabanboard />} />
             <Route path="/create-plan/:appname" element={<CreatePlan />} />
             <Route path="/create-task/:appname" element={<CreateTask />} />
+            <Route path="/task/:taskid" element={<IndividualTask />} />
           </Routes>
         </div>
       </BrowserRouter>

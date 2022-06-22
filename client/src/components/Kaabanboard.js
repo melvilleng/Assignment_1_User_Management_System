@@ -12,6 +12,7 @@ function Kaabanboard() {
   const acronym_name = app_acronym.appname.toString();
   console.log(acronym_name);
   const [showplan, setShowplan] = useState([]);
+  const [showtask, setShowtask] = useState([]);
 
   const showallplan = async () => {
     await axios
@@ -22,8 +23,16 @@ function Kaabanboard() {
       });
   };
 
+  const showalltask = async () => {
+    await axios.get(`/showtask/${acronym_name}`).then((response) => {
+      console.log(response.data);
+      setShowtask(response.data);
+    });
+  };
+
   useEffect(() => {
-    showallplan(); // eslint-disable-next-line
+    showallplan();
+    showalltask(); // eslint-disable-next-line
   }, []);
 
   return (
@@ -78,21 +87,33 @@ function Kaabanboard() {
                   <div className="card-actions float-right"></div>
                   <h5 className="card-title">Open</h5>
                 </div>
-                <div className="card-body p-3">
-                  <div className="card mb-3 bg-light">
-                    <div className="card-body p-3">
-                      <p>
-                        Curabitur ligula sapien, tincidunt non, euismod vitae,
-                        posuere imperdiet, leo. Maecenas malesuada.
-                      </p>
-
-                      <button className="btn btn-outline-primary btn-sm">
-                        View
-                      </button>
-                    </div>
-                  </div>
-
-                  <button className="btn btn-primary btn-block">Add new</button>
+                <div className="rightinnerbodytask">
+                  {showtask.map((eachtask) => {
+                    if (eachtask.Task_state === "Open") {
+                      return (
+                        <div className="card-body">
+                          <div className="card mb-3 bg-light">
+                            <p className="card-right-title">
+                              {eachtask.Task_owner}
+                            </p>
+                            <div className="card-body p-7">
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Description:</h6>
+                              <p>{eachtask.Task_description}</p>
+                            </div>
+                          </div>
+                          <Link to={`/task/${eachtask.Task_id}`}>
+                            <button className="btn btn-primary btn-block">
+                              view
+                            </button>
+                          </Link>
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </div>
               </div>
             </div>
@@ -102,21 +123,32 @@ function Kaabanboard() {
                   <div className="card-actions float-right"></div>
                   <h5 className="card-title">To-do-list</h5>
                 </div>
-                <div className="card-body">
-                  <div className="card mb-3 bg-light">
-                    <div className="card-body p-3">
-                      <p>
-                        Curabitur ligula sapien, tincidunt non, euismod vitae,
-                        posuere imperdiet, leo. Maecenas malesuada.
-                      </p>
-                      <div className="float-right mt-n1"></div>
-                      <button className="btn btn-outline-primary btn-sm">
-                        View
-                      </button>
-                    </div>
-                  </div>
+                <div className="rightinnerbodytask">
+                  {showtask.map((eachtask) => {
+                    if (eachtask.Task_state === "To-do-list") {
+                      return (
+                        <div className="card-body">
+                          <div className="card mb-3 bg-light">
+                            <p className="card-right-title">
+                              {eachtask.Task_owner}
+                            </p>
+                            <div className="card-body p-7">
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                            </div>
+                          </div>
 
-                  <button className="btn btn-primary btn-block">Add new</button>
+                          <button className="btn btn-primary btn-block">
+                            move
+                          </button>
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </div>
               </div>
             </div>
@@ -126,18 +158,32 @@ function Kaabanboard() {
                   <div className="card-actions float-right"></div>
                   <h5 className="card-title">Doing</h5>
                 </div>
-                <div className="card-body">
-                  <div className="card mb-3 bg-light">
-                    <div className="card-body p-3">
-                      <p>
-                        In hac habitasse platea dictumst. Curabitur at lacus ac
-                        velit ornare lobortis. Curabitur a felis tristique.
-                      </p>
-                      <div className="float-right mt-n1"></div>
-                    </div>
-                  </div>
+                <div className="rightinnerbodytask">
+                  {showtask.map((eachtask) => {
+                    if (eachtask.Task_state === "Doing") {
+                      return (
+                        <div className="card-body">
+                          <div className="card mb-3 bg-light">
+                            <p className="card-right-title">
+                              {eachtask.Task_owner}
+                            </p>
+                            <div className="card-body p-7">
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                            </div>
+                          </div>
 
-                  <button className="btn btn-primary btn-block">Add new</button>
+                          <button className="btn btn-primary btn-block">
+                            move
+                          </button>
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </div>
               </div>
             </div>
@@ -147,39 +193,68 @@ function Kaabanboard() {
                   <div className="card-actions float-right"></div>
                   <h5 className="card-title">Done</h5>
                 </div>
-                <div className="card-body">
-                  <div className="card mb-3 bg-light">
-                    <div className="card-body p-3">
-                      <p>
-                        In hac habitasse platea dictumst. Curabitur at lacus ac
-                        velit ornare lobortis. Curabitur a felis tristique.
-                      </p>
-                      <div className="float-right mt-n1"></div>
-                    </div>
-                  </div>
+                <div className="rightinnerbodytask">
+                  {showtask.map((eachtask) => {
+                    if (eachtask.Task_state === "Done") {
+                      return (
+                        <div className="card-body">
+                          <div className="card mb-3 bg-light">
+                            <p className="card-right-title">
+                              {eachtask.Task_owner}
+                            </p>
+                            <div className="card-body p-7">
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                            </div>
+                          </div>
 
-                  <button className="btn btn-primary btn-block">Add new</button>
+                          <button className="btn btn-primary btn-block">
+                            move
+                          </button>
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </div>
               </div>
             </div>
+
             <div className="col">
               <div className="card card-border-success">
                 <div className="card-header">
                   <div className="card-actions float-right"></div>
                   <h5 className="card-title">Close</h5>
                 </div>
-                <div className="card-body">
-                  <div className="card mb-3 bg-light">
-                    <div className="card-body p-3">
-                      <p>
-                        Nam pretium turpis et arcu. Duis arcu tortor, suscipit
-                        eget, imperdiet nec, imperdiet iaculis, ipsum.
-                      </p>
-                      <div className="float-right mt-n1"></div>
-                    </div>
-                  </div>
+                <div className="rightinnerbodytask">
+                  {showtask.map((eachtask) => {
+                    if (eachtask.Task_state === "Close") {
+                      return (
+                        <div className="card-body">
+                          <div className="card mb-3 bg-light">
+                            <p className="card-right-title">
+                              {eachtask.Task_owner}
+                            </p>
+                            <div className="card-body p-1">
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Name:</h6>
+                              <p>{eachtask.Task_name}</p>
+                            </div>
+                          </div>
 
-                  <button className="btn btn-primary btn-block">Add new</button>
+                          <button className="btn btn-primary btn-block">
+                            move
+                          </button>
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </div>
               </div>
             </div>
