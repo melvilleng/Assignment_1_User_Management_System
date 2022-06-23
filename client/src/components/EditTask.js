@@ -1,33 +1,52 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ExampleContext } from "../ExampleContext.js";
 
-function IndividualTask() {
+function EditIndividualTask() {
+  const { usernamestore } = useContext(ExampleContext);
   const [singletask, setSingletask] = useState([]);
-  // const [task_name, setTaskname] = useState("");
-  // const [task_description, setTaskdescription] = useState("");
+  const [task_description, setTaskdescription] = useState("");
   // const [task_notes, setTasknotes] = useState("");
-  // const [task_plan, setTaskplan] = useState("");
+  const [gettask_plan, setgetTaskplan] = useState([]);
+  const [task_plan, setTaskplan] = useState("");
   // const [task_owner, setTaskowner] = useState("");
   const { taskid } = useParams();
   const navigate = useNavigate();
+  const newtaskid = taskid.split("_");
 
-  const showindividualtask = () => {
-    axios.get(`/showsingletask/${taskid}`).then((response) => {
-      console.log(response.data);
+  const showindividualtask = async () => {
+    await axios.get(`/showsingletask/${taskid}`).then((response) => {
       setSingletask(response.data);
     });
   };
 
-  const gotoedittask = () => {
-    navigate(`/edittask/${taskid}`);
+  const showtaskplan = async () => {
+    await axios.get(`/showplan/${newtaskid[0]}`).then((response) => {
+      setgetTaskplan(response.data);
+    });
   };
+
+  const edittask = async () => {
+    await axios
+      .post("/edittask", {
+        task_description: task_description,
+        task_plan: task_plan,
+        taskid: taskid,
+        task_owner: usernamestore,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  };
+
   const goback = () => {
     navigate(-1);
   };
 
   useEffect(() => {
-    showindividualtask(); // eslint-disable-next-line
+    showindividualtask(); //eslint-disable-next-line
+    showtaskplan(); //eslint-disable-next-line
   }, []);
 
   return (
@@ -50,10 +69,10 @@ function IndividualTask() {
                 id="email-change"
                 className="form-control"
                 type="text"
-                value={singletask.Task_description}
-                // onChange={(event) => {
-                //   setChangeEmail(event.target.value);
-                // }}
+                placeholder={singletask.Task_description}
+                onChange={(event) => {
+                  setTaskdescription(event.target.value);
+                }}
               ></textarea>
             </div>
 
@@ -61,7 +80,22 @@ function IndividualTask() {
               <label htmlFor="username-register" className="text-muted mb-1">
                 <small>Plan</small>
               </label>
-              <h3 className="form-control">{singletask.Task_plan}</h3>
+              <select
+                onChange={(event) => {
+                  setTaskplan(event.target.value);
+                }}
+                className="form-control"
+                defaultValue={" "}
+              >
+                <option value=" " disabled>
+                  Select your Plan
+                </option>
+                {gettask_plan.map((listtask, keytask) => {
+                  return (
+                    <option key={keytask}>{listtask.Plan_MVP_name}</option>
+                  );
+                })}
+              </select>
             </div>
 
             <div className="form-group">
@@ -72,10 +106,10 @@ function IndividualTask() {
             </div>
 
             <button
-              onClick={gotoedittask}
+              onClick={edittask}
               className="py-3 mt-4 btn btn-lg btn-success btn-block"
             >
-              Edit
+              Update Task
             </button>
           </form>
         </div>
@@ -89,4 +123,4 @@ function IndividualTask() {
   );
 }
 
-export default IndividualTask;
+export default EditIndividualTask;

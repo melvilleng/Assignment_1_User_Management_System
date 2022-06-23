@@ -431,11 +431,11 @@ app.post("/create_plan", function (req, res) {
 });
 
 //show all plan link to project
-app.post("/showplan", function (req, res) {
-  const plan_app_acronym = req.body.acronym_name;
+app.get("/showplan/:appname", function (req, res) {
+  // const plan_app_acronym = req.params.acronym_name;
   db.query(
     "SELECT * FROM plan WHERE Plan_app_Acronym=?",
-    [plan_app_acronym],
+    [req.params.appname],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -515,6 +515,70 @@ app.get("/showsingletask/:taskid", function (req, res) {
         console.log(err);
       } else {
         res.send(result[0]);
+      }
+    }
+  );
+});
+
+app.post("/edittask", function (req, res) {
+  const task_description = req.body.task_description;
+  const task_plan = req.body.task_plan;
+  const task_owner = req.body.task_owner;
+  const taskid = req.body.taskid;
+  db.query(
+    "UPDATE task SET Task_description=?,Task_plan=?,Task_owner=? WHERE Task_id=?",
+    [task_description, task_plan, task_owner, taskid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("done");
+      }
+    }
+  );
+});
+
+app.post("/promote_task", function (req, res) {
+  const check_task_state = req.body.task_state;
+  if (check_task_state === "Open") {
+    task_state = "To-do-list";
+  } else if (check_task_state === "To-do-list") {
+    task_state = "Doing";
+  } else if (check_task_state === "Doing") {
+    task_state = "Done";
+  } else {
+    task_state = "Close";
+  }
+  const taskid = req.body.taskid;
+  db.query(
+    "UPDATE task SET Task_state=? WHERE Task_id=?",
+    [task_state, taskid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("Done");
+      }
+    }
+  );
+});
+
+app.post("/demote_task", function (req, res) {
+  const check_task_state = req.body.task_state;
+  if (check_task_state === "Done") {
+    task_state = "Doing";
+  } else if (check_task_state === "Doing") {
+    task_state = "To-do-list";
+  }
+  const taskid = req.body.taskid;
+  db.query(
+    "UPDATE task SET Task_state=? WHERE Task_id=?",
+    [task_state, taskid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("Done");
       }
     }
   );

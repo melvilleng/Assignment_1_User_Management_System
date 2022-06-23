@@ -13,14 +13,13 @@ function Kaabanboard() {
   console.log(acronym_name);
   const [showplan, setShowplan] = useState([]);
   const [showtask, setShowtask] = useState([]);
+  const [boardupdate, setBoardupdate] = useState(0);
 
   const showallplan = async () => {
-    await axios
-      .post("/showplan", { acronym_name: acronym_name })
-      .then((response) => {
-        console.log(response.data);
-        setShowplan(response.data);
-      });
+    await axios.get(`/showplan/${acronym_name}`).then((response) => {
+      console.log(response.data);
+      setShowplan(response.data);
+    });
   };
 
   const showalltask = async () => {
@@ -30,10 +29,32 @@ function Kaabanboard() {
     });
   };
 
+  const promote_task = async (task_each_id, task_each_state) => {
+    await axios
+      .post("/promote_task", {
+        task_state: task_each_state,
+        taskid: task_each_id,
+      })
+      .then((response) => {
+        setBoardupdate(boardupdate + 1);
+      });
+  };
+
+  const demote_task = async (task_each_id, task_each_state) => {
+    await axios
+      .post("/demote_task", {
+        task_state: task_each_state,
+        taskid: task_each_id,
+      })
+      .then((response) => {
+        setBoardupdate(boardupdate + 1);
+      });
+  };
+
   useEffect(() => {
     showallplan();
     showalltask(); // eslint-disable-next-line
-  }, []);
+  }, [boardupdate]);
 
   return (
     <main className="flex-container">
@@ -103,11 +124,23 @@ function Kaabanboard() {
                               <p>{eachtask.Task_description}</p>
                             </div>
                           </div>
-                          <Link to={`/task/${eachtask.Task_id}`}>
-                            <button className="btn btn-primary btn-block">
-                              view
+                          <div>
+                            <Link to={`/task/${eachtask.Task_id}`}>
+                              <button className="btn btn-primary btn-block">
+                                view
+                              </button>
+                            </Link>
+                            <button
+                              onClick={() =>
+                                promote_task(
+                                  eachtask.Task_id,
+                                  eachtask.Task_state
+                                )
+                              }
+                            >
+                              Move Right
                             </button>
-                          </Link>
+                          </div>
                         </div>
                       );
                     } else {
@@ -143,6 +176,16 @@ function Kaabanboard() {
                           <button className="btn btn-primary btn-block">
                             move
                           </button>
+                          <button
+                            onClick={() =>
+                              promote_task(
+                                eachtask.Task_id,
+                                eachtask.Task_state
+                              )
+                            }
+                          >
+                            Move Right
+                          </button>
                         </div>
                       );
                     } else {
@@ -174,9 +217,26 @@ function Kaabanboard() {
                               <p>{eachtask.Task_name}</p>
                             </div>
                           </div>
+                          <button
+                            onClick={() =>
+                              demote_task(eachtask.Task_id, eachtask.Task_state)
+                            }
+                          >
+                            Move Left
+                          </button>
 
                           <button className="btn btn-primary btn-block">
-                            move
+                            View
+                          </button>
+                          <button
+                            onClick={() =>
+                              promote_task(
+                                eachtask.Task_id,
+                                eachtask.Task_state
+                              )
+                            }
+                          >
+                            Move Right
                           </button>
                         </div>
                       );
@@ -209,9 +269,26 @@ function Kaabanboard() {
                               <p>{eachtask.Task_name}</p>
                             </div>
                           </div>
+                          <button
+                            onClick={() =>
+                              demote_task(eachtask.Task_id, eachtask.Task_state)
+                            }
+                          >
+                            Move Left
+                          </button>
 
                           <button className="btn btn-primary btn-block">
-                            move
+                            View
+                          </button>
+                          <button
+                            onClick={() =>
+                              promote_task(
+                                eachtask.Task_id,
+                                eachtask.Task_state
+                              )
+                            }
+                          >
+                            Move Right
                           </button>
                         </div>
                       );
@@ -245,10 +322,6 @@ function Kaabanboard() {
                               <p>{eachtask.Task_name}</p>
                             </div>
                           </div>
-
-                          <button className="btn btn-primary btn-block">
-                            move
-                          </button>
                         </div>
                       );
                     } else {
