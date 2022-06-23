@@ -68,7 +68,9 @@ function IndividualTask() {
               <label htmlFor="username-register" className="text-muted mb-1">
                 <small>Notes</small>
               </label>
-              <div className="note-box">test</div>
+              <div className="note-box" style={{ fontSize: "13px" }}>
+                <pre>{singletask.Task_notes}</pre>
+              </div>
             </div>
 
             <button

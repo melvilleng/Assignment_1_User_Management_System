@@ -14,7 +14,6 @@ function CreateTask() {
   const { usernamestore } = useContext(ExampleContext);
   const [task_description, setTaskdescription] = useState("");
   const plan_app_Acronym = useParams();
-  console.log(plan_app_Acronym.appname);
 
   const getrnumber = async () => {
     await axios

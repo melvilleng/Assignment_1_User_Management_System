@@ -10,6 +10,8 @@ const bcrypt = require("bcrypt");
 
 const app = express();
 
+let datetime = new Date();
+
 app.use(express.json());
 app.use(
   cors({
@@ -456,9 +458,18 @@ app.post("/createtask", function (req, res) {
   const task_owner = req.body.task_owner;
   const task_createdate = req.body.create_date;
   let rnumber = req.body.rnumber;
+  let timestamp =
+    "Task Created" +
+    "\n\r" +
+    "Userid: " +
+    task_owner +
+    "," +
+    " Current State: Open, " +
+    "Datetime " +
+    datetime;
 
   db.query(
-    "INSERT INTO task(Task_id,Task_name,Task_description,Task_app_Acronym,Task_creator,Task_owner,Task_createDate) VALUES (?,?,?,?,?,?,?)",
+    "INSERT INTO task(Task_id,Task_name,Task_description,Task_app_Acronym,Task_creator,Task_owner,Task_createDate,Task_notes) VALUES (?,?,?,?,?,?,?,?)",
     [
       taskid,
       task_name,
@@ -467,6 +478,7 @@ app.post("/createtask", function (req, res) {
       task_creator,
       task_owner,
       task_createdate,
+      timestamp,
     ],
     (err, result) => {
       if (err) {
@@ -520,6 +532,7 @@ app.get("/showsingletask/:taskid", function (req, res) {
   );
 });
 
+//edit task
 app.post("/edittask", function (req, res) {
   const task_description = req.body.task_description;
   const task_plan = req.body.task_plan;
@@ -538,6 +551,7 @@ app.post("/edittask", function (req, res) {
   );
 });
 
+//promote task
 app.post("/promote_task", function (req, res) {
   const check_task_state = req.body.task_state;
   if (check_task_state === "Open") {
@@ -563,6 +577,7 @@ app.post("/promote_task", function (req, res) {
   );
 });
 
+//demote task
 app.post("/demote_task", function (req, res) {
   const check_task_state = req.body.task_state;
   if (check_task_state === "Done") {
