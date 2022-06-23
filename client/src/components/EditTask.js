@@ -10,14 +10,15 @@ function EditIndividualTask() {
   // const [task_notes, setTasknotes] = useState("");
   const [gettask_plan, setgetTaskplan] = useState([]);
   const [task_plan, setTaskplan] = useState("");
-  // const [task_owner, setTaskowner] = useState("");
   const { taskid } = useParams();
   const navigate = useNavigate();
   const newtaskid = taskid.split("_");
+  const [gettaskstate, setTaskstate] = useState("");
 
   const showindividualtask = async () => {
     await axios.get(`/showsingletask/${taskid}`).then((response) => {
       setSingletask(response.data);
+      setTaskstate(response.data.Task_state);
     });
   };
 
@@ -34,6 +35,7 @@ function EditIndividualTask() {
         task_plan: task_plan,
         taskid: taskid,
         task_owner: usernamestore,
+        task_state: gettaskstate,
       })
       .then((response) => {
         console.log(response);
@@ -102,7 +104,9 @@ function EditIndividualTask() {
               <label htmlFor="username-register" className="text-muted mb-1">
                 <small>Notes</small>
               </label>
-              <div className="note-box">test</div>
+              <div className="note-box">
+                <pre>{singletask.Task_notes}</pre>
+              </div>
             </div>
 
             <button

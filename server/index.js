@@ -538,6 +538,16 @@ app.post("/edittask", function (req, res) {
   const task_plan = req.body.task_plan;
   const task_owner = req.body.task_owner;
   const taskid = req.body.taskid;
+  const taskstate = req.body.task_state;
+  let timestamp =
+    "Task Created" +
+    "\n\r" +
+    "Userid: " +
+    task_owner +
+    " Current State: " +
+    taskstate +
+    " Datetime " +
+    datetime;
   db.query(
     "UPDATE task SET Task_description=?,Task_plan=?,Task_owner=? WHERE Task_id=?",
     [task_description, task_plan, task_owner, taskid],
