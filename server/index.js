@@ -412,6 +412,25 @@ app.get("/showallapplication/:appname", function (req, res) {
   );
 });
 
+//edit one application
+app.post("/edit_application", function (req, res) {
+  const app_description = req.body.app_description;
+  const app_start_date = req.body.app_start_date;
+  const app_end_date = req.body.app_end_date;
+  const appname = req.body.appname;
+  db.query(
+    "UPDATE application SET App_Description=?,App_startDate=?,App_endDate=? WHERE App_Acronym=?",
+    [app_description, app_start_date, app_end_date, appname],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("update");
+      }
+    }
+  );
+});
+
 //create plan
 app.post("/create_plan", function (req, res) {
   const plan_mvp_name = req.body.plan_mvp_name;
