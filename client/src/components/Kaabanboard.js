@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
+import { ExampleContext } from "../ExampleContext.js";
 import axios from "axios";
 import moment from "moment";
 
 function Kaabanboard() {
-  //   const current = new Date();
-  //   const date = `${current.getFullYear()}/${
-  //     current.getMonth() + 1
-  //   }/${current.getDate()}`;
   const app_acronym = useParams();
   const acronym_name = app_acronym.appname.toString();
   console.log(acronym_name);
   const [showplan, setShowplan] = useState([]);
   const [showtask, setShowtask] = useState([]);
   const [boardupdate, setBoardupdate] = useState(0);
+  const { usernamestore } = useContext(ExampleContext);
 
   const showallplan = async () => {
     await axios.get(`/showplan/${acronym_name}`).then((response) => {
@@ -29,22 +27,35 @@ function Kaabanboard() {
     });
   };
 
-  const promote_task = async (task_each_id, task_each_state) => {
+  const promote_task = async (
+    task_each_id,
+    task_each_state,
+    task_each_notes
+  ) => {
+    console.log(task_each_notes);
     await axios
       .post("/promote_task", {
         task_state: task_each_state,
         taskid: task_each_id,
+        userid: usernamestore,
+        tasknotes: task_each_notes,
       })
       .then((response) => {
         setBoardupdate(boardupdate + 1);
       });
   };
 
-  const demote_task = async (task_each_id, task_each_state) => {
+  const demote_task = async (
+    task_each_id,
+    task_each_state,
+    task_each_notes
+  ) => {
     await axios
       .post("/demote_task", {
         task_state: task_each_state,
         taskid: task_each_id,
+        userid: usernamestore,
+        tasknotes: task_each_notes,
       })
       .then((response) => {
         setBoardupdate(boardupdate + 1);
@@ -134,7 +145,8 @@ function Kaabanboard() {
                               onClick={() =>
                                 promote_task(
                                   eachtask.Task_id,
-                                  eachtask.Task_state
+                                  eachtask.Task_state,
+                                  eachtask.Task_notes
                                 )
                               }
                             >
@@ -173,14 +185,17 @@ function Kaabanboard() {
                             </div>
                           </div>
 
-                          <button className="btn btn-primary btn-block">
-                            move
-                          </button>
+                          <Link to={`/task/${eachtask.Task_id}`}>
+                            <button className="btn btn-primary btn-block">
+                              view
+                            </button>
+                          </Link>
                           <button
                             onClick={() =>
                               promote_task(
                                 eachtask.Task_id,
-                                eachtask.Task_state
+                                eachtask.Task_state,
+                                eachtask.Task_notes
                               )
                             }
                           >
@@ -219,7 +234,11 @@ function Kaabanboard() {
                           </div>
                           <button
                             onClick={() =>
-                              demote_task(eachtask.Task_id, eachtask.Task_state)
+                              demote_task(
+                                eachtask.Task_id,
+                                eachtask.Task_state,
+                                eachtask.Task_notes
+                              )
                             }
                           >
                             Move Left
@@ -232,7 +251,8 @@ function Kaabanboard() {
                             onClick={() =>
                               promote_task(
                                 eachtask.Task_id,
-                                eachtask.Task_state
+                                eachtask.Task_state,
+                                eachtask.Task_notes
                               )
                             }
                           >
@@ -271,7 +291,11 @@ function Kaabanboard() {
                           </div>
                           <button
                             onClick={() =>
-                              demote_task(eachtask.Task_id, eachtask.Task_state)
+                              demote_task(
+                                eachtask.Task_id,
+                                eachtask.Task_state,
+                                eachtask.Task_notes
+                              )
                             }
                           >
                             Move Left
@@ -284,7 +308,8 @@ function Kaabanboard() {
                             onClick={() =>
                               promote_task(
                                 eachtask.Task_id,
-                                eachtask.Task_state
+                                eachtask.Task_state,
+                                eachtask.Task_notes
                               )
                             }
                           >

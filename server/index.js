@@ -463,8 +463,9 @@ app.post("/createtask", function (req, res) {
     "\n\r" +
     "Userid: " +
     task_owner +
-    "," +
-    " Current State: Open, " +
+    "\n" +
+    "Current State: Open" +
+    "\n" +
     "Datetime " +
     datetime;
 
@@ -539,8 +540,12 @@ app.post("/edittask", function (req, res) {
   const task_owner = req.body.task_owner;
   const taskid = req.body.taskid;
   const taskstate = req.body.task_state;
-  let timestamp =
-    "Task Created" +
+  const task_notes = req.body.task_notes;
+  const existingdes = req.body.existingdes;
+  const existingplan = req.body.existingplan;
+
+  let Plantimestamp =
+    "Plan Updated" +
     "\n\r" +
     "Userid: " +
     task_owner +
@@ -548,22 +553,119 @@ app.post("/edittask", function (req, res) {
     taskstate +
     " Datetime " +
     datetime;
-  db.query(
-    "UPDATE task SET Task_description=?,Task_plan=?,Task_owner=? WHERE Task_id=?",
-    [task_description, task_plan, task_owner, taskid],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send("done");
+  let Destimestamp =
+    "Description Updated" +
+    "\n\r" +
+    "Userid: " +
+    task_owner +
+    "\n" +
+    " Current State: " +
+    taskstate +
+    "\n" +
+    " Datetime " +
+    datetime;
+  //update plan
+  if (task_plan) {
+    db.query(
+      "UPDATE task SET Task_plan=?,Task_owner=? WHERE Task_id=?",
+      [task_plan, task_owner, taskid],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          if (task_notes === null || task_notes === "") {
+            db.query(
+              "UPDATE task SET Task_notes=? WHERE Task_id=?",
+              [Plantimestamp, taskid],
+              (err, result) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log("plan");
+                }
+              }
+            );
+          } else {
+            let newtimestamp =
+              "From " +
+              existingplan +
+              "-->" +
+              task_plan +
+              "\n" +
+              Plantimestamp +
+              "\n" +
+              task_notes;
+            db.query(
+              "UPDATE task SET Task_notes=? WHERE Task_id=?",
+              [newtimestamp, taskid],
+              (err, result) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log("plan");
+                }
+              }
+            );
+          }
+        }
       }
-    }
-  );
+    );
+  }
+  //updating description
+  else if (task_description) {
+    db.query(
+      "UPDATE task SET Task_description=?,Task_owner=? WHERE Task_id=?",
+      [task_description, task_owner, taskid],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          if (task_notes === null || task_notes === "") {
+            db.query(
+              "UPDATE task SET Task_notes=? WHERE Task_id=?",
+              [Destimestamp, taskid],
+              (err, result) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log("des");
+                }
+              }
+            );
+          } else {
+            let newtimestamp =
+              "From " +
+              existingdes +
+              "-->" +
+              task_description +
+              "\n" +
+              Destimestamp +
+              "\n" +
+              task_notes;
+            db.query(
+              "UPDATE task SET Task_notes=? WHERE Task_id=?",
+              [newtimestamp, taskid],
+              (err, result) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log("TEST");
+                }
+              }
+            );
+          }
+        }
+      }
+    );
+  }
 });
 
 //promote task
 app.post("/promote_task", function (req, res) {
   const check_task_state = req.body.task_state;
+  const userid = req.body.userid;
+  const task_notes = req.body.tasknotes;
+
   if (check_task_state === "Open") {
     task_state = "To-do-list";
   } else if (check_task_state === "To-do-list") {
@@ -574,9 +676,26 @@ app.post("/promote_task", function (req, res) {
     task_state = "Close";
   }
   const taskid = req.body.taskid;
+  let timestamp =
+    check_task_state +
+    "-->" +
+    task_state +
+    "\n" +
+    "State Changed" +
+    "\n\r" +
+    "Userid: " +
+    userid +
+    "\n" +
+    "Current State: " +
+    task_state +
+    "\n" +
+    "Datetime " +
+    datetime +
+    "\n" +
+    task_notes;
   db.query(
-    "UPDATE task SET Task_state=? WHERE Task_id=?",
-    [task_state, taskid],
+    "UPDATE task SET Task_state=?,Task_notes=? WHERE Task_id=?",
+    [task_state, timestamp, taskid],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -590,15 +709,34 @@ app.post("/promote_task", function (req, res) {
 //demote task
 app.post("/demote_task", function (req, res) {
   const check_task_state = req.body.task_state;
+  const userid = req.body.userid;
+  const task_notes = req.body.tasknotes;
   if (check_task_state === "Done") {
     task_state = "Doing";
   } else if (check_task_state === "Doing") {
     task_state = "To-do-list";
   }
   const taskid = req.body.taskid;
+  let timestamp =
+    check_task_state +
+    "-->" +
+    task_state +
+    "\n" +
+    "State Changed" +
+    "\n\r" +
+    "Userid: " +
+    userid +
+    "\n" +
+    "Current State: " +
+    task_state +
+    "\n" +
+    "Datetime " +
+    datetime +
+    "\n" +
+    task_notes;
   db.query(
-    "UPDATE task SET Task_state=? WHERE Task_id=?",
-    [task_state, taskid],
+    "UPDATE task SET Task_state=?,Task_notes=? WHERE Task_id=?",
+    [task_state, timestamp, taskid],
     (err, result) => {
       if (err) {
         console.log(err);

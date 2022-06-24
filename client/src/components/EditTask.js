@@ -7,7 +7,7 @@ function EditIndividualTask() {
   const { usernamestore } = useContext(ExampleContext);
   const [singletask, setSingletask] = useState([]);
   const [task_description, setTaskdescription] = useState("");
-  // const [task_notes, setTasknotes] = useState("");
+  const [listtask_notes, setlistTasknotes] = useState("");
   const [gettask_plan, setgetTaskplan] = useState([]);
   const [task_plan, setTaskplan] = useState("");
   const { taskid } = useParams();
@@ -19,6 +19,8 @@ function EditIndividualTask() {
     await axios.get(`/showsingletask/${taskid}`).then((response) => {
       setSingletask(response.data);
       setTaskstate(response.data.Task_state);
+      let listnotes = response.data.Task_notes;
+      setlistTasknotes(listnotes);
     });
   };
 
@@ -28,14 +30,29 @@ function EditIndividualTask() {
     });
   };
 
-  const edittask = async () => {
+  const edittaskdes = async (task_notes, existingdes) => {
     await axios
       .post("/edittask", {
         task_description: task_description,
+        taskid: taskid,
+        task_owner: usernamestore,
+        task_state: gettaskstate,
+        task_notes: task_notes,
+        existingdes: existingdes,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  };
+  const edittaskplan = async (task_notes, existingplan) => {
+    await axios
+      .post("/edittask", {
         task_plan: task_plan,
         taskid: taskid,
         task_owner: usernamestore,
         task_state: gettaskstate,
+        task_notes: task_notes,
+        existingplan: existingplan,
       })
       .then((response) => {
         console.log(response);
@@ -77,6 +94,14 @@ function EditIndividualTask() {
                 }}
               ></textarea>
             </div>
+            <button
+              onClick={() => {
+                edittaskdes(singletask.Task_notes, singletask.Task_description);
+              }}
+              className="py-3 mt-4 btn btn-lg btn-success btn-block"
+            >
+              Update Description
+            </button>
 
             <div className="form-group">
               <label htmlFor="username-register" className="text-muted mb-1">
@@ -99,22 +124,23 @@ function EditIndividualTask() {
                 })}
               </select>
             </div>
+            <button
+              onClick={() => {
+                edittaskplan(singletask.Task_notes, singletask.Task_plan);
+              }}
+              className="py-3 mt-4 btn btn-lg btn-success btn-block"
+            >
+              Update Plan
+            </button>
 
             <div className="form-group">
               <label htmlFor="username-register" className="text-muted mb-1">
                 <small>Notes</small>
               </label>
               <div className="note-box">
-                <pre>{singletask.Task_notes}</pre>
+                <pre>{listtask_notes}</pre>
               </div>
             </div>
-
-            <button
-              onClick={edittask}
-              className="py-3 mt-4 btn btn-lg btn-success btn-block"
-            >
-              Update Task
-            </button>
           </form>
         </div>
       </div>
